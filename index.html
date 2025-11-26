@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pistachio: Video Anomaly Benchmarks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom, #ffffff, #f0fdf4);
+        }
+
+        .hero-background {
+            background-color: #ffffff;
+            position: relative;
+            padding-top: 6rem;
+            padding-bottom: 6rem;
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .hero-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://files.imagetourl.net/uploads/1763985568355-41b38356-170b-4e86-a3ba-52f163e589ab.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+            filter: grayscale(20%);
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 6xl;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            padding: 0 1rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #047857, #059669, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glow-effect {
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.3), 
+                         0 0 40px rgba(16, 185, 129, 0.2);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .abstract-box {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-left: 6px solid #059669;
+            box-shadow: 0 10px 30px rgba(5, 150, 105, 0.2);
+        }
+
+        .btn-emerald {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            box-shadow: 0 10px 20px rgba(5, 150, 105, 0.3);
+        }
+
+        .btn-emerald:hover {
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+            box-shadow: 0 15px 30px rgba(5, 150, 105, 0.4);
+        }
+
+        .btn-teal {
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+            box-shadow: 0 10px 20px rgba(13, 148, 136, 0.3);
+        }
+
+        .btn-teal:hover {
+            background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+            box-shadow: 0 15px 30px rgba(13, 148, 136, 0.4);
+        }
+
+        .btn-lime {
+            background: linear-gradient(135deg, #65a30d 0%, #4d7c0f 100%);
+            box-shadow: 0 10px 20px rgba(101, 163, 13, 0.3);
+        }
+
+        .btn-lime:hover {
+            background: linear-gradient(135deg, #4d7c0f 0%, #3f6212 100%);
+            box-shadow: 0 15px 30px rgba(101, 163, 13, 0.4);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <header class="hero-background">
+        <div class="hero-content">
+            <h1 class="font-extrabold tracking-tight mb-6 text-center float-animation">
+                <span class="block text-4xl sm:text-5xl lg:text-6xl leading-tight gradient-text glow-effect">
+                    Pistachio:
+                </span>
+                <span class="block text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-snug mt-4 text-emerald-800 drop-shadow-lg">
+                    Towards Synthetic, Balanced, and Long-Form
+                </span>
+                <span class="block text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-snug mt-2 text-emerald-700 drop-shadow-lg">
+                    Video Anomaly Benchmarks
+                </span>
+            </h1>
+            
+            <div class="mt-8 mb-2 text-center">
+                <p class="text-base sm:text-lg text-gray-700 font-bold">
+                    Jie Li<sup>*</sup> &nbsp;&nbsp;
+                    Hongyi Cai<sup>*</sup> &nbsp;&nbsp;
+                    Mingkang Dong &nbsp;&nbsp;
+                    Muxin Pu &nbsp;&nbsp;
+                    Shan You &nbsp;&nbsp;
+                    Fei Wang &nbsp;&nbsp;
+                    Tao Huang
+                </p>
+                <p class="text-sm text-gray-600 font-semibold mt-3">
+                    University of Science & Technology Beijing &nbsp;·&nbsp;
+                    Universiti Malaya &nbsp;·&nbsp;
+                    Monash University &nbsp;·&nbsp;
+                    SenseTime Research &nbsp;·&nbsp;
+                    Shanghai Jiaotong University
+                </p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6 mt-10">
+                <a href="https://arxiv.org/abs/2511.19474" target="_blank" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-red-600 hover:bg-red-700 transition duration-300 transform hover:scale-105 shadow-lg">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                    </svg>
+                    Paper
+                </a>
+                
+                <a href="#" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-gray-800 hover:bg-gray-900 transition duration-300 transform hover:scale-105 shadow-lg">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+                    Code
+                </a>
+                
+                <a href="#" class="btn-lime inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white transition duration-300 transform hover:scale-105">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z"/>
+                    </svg>
+                    Dataset
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+        <div class="abstract-box p-8 rounded-2xl">
+            <h2 class="text-3xl font-bold text-emerald-900 mb-6 flex items-center">
+                <svg class="w-8 h-8 mr-3 text-emerald-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                Abstract
+            </h2>
+            <p class="text-lg text-gray-800 leading-relaxed indent-8">
+                Automatically detecting abnormal events in videos is crucial for modern autonomous systems, yet existing Video Anomaly Detection (VAD) benchmarks lack the scene diversity, balanced anomaly coverage, and temporal complexity needed to reliably assess real-world performance. Meanwhile, the community is increasingly moving toward Video Anomaly Understanding (VAU), which requires deeper semantic and causal reasoning but remains difficult to benchmark due to the heavy manual annotation effort it demands. In this paper, we introduce Pistachio, a new VAD/VAU benchmark constructed entirely through a controlled, generation-based pipeline. By leveraging recent advances in video generation models, Pistachio provides precise control over scenes, anomaly types, and temporal narratives, effectively eliminating the biases and limitations of Internet-collected datasets. Our pipeline integrates scene-conditioned anomaly assignment, multi-step storyline generation, and a temporally consistent long-form synthesis strategy that produces coherent 41-second videos with minimal human intervention. Extensive experiments demonstrate the scale, diversity, and complexity of Pistachio, revealing new challenges for existing methods and motivating future research on dynamic and multi-event anomaly understanding.
+            </p>
+        </div>
+    </main>
+
+    <!-- Dataset Showcase Section -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-emerald-900 mb-4 flex items-center justify-center">
+                <svg class="w-10 h-10 mr-3 text-emerald-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+                </svg>
+                Dataset Showcase
+            </h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                Explore our diverse collection of 32 video anomaly categories with synthetic, balanced, and temporally complex scenarios
+            </p>
+        </div>
+
+        <!-- Video Grid -->
+        <div id="videoGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Videos will be generated by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center z-50" onclick="closeModal()">
+        <div class="relative max-w-4xl w-full mx-4" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute -top-10 right-0 text-white hover:text-emerald-400 transition-colors">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <video id="modalVideo" class="w-full rounded-lg shadow-2xl" controls autoplay>
+                <source src="" type="video/mp4">
+            </video>
+            <div class="mt-4 text-white text-center">
+                <h3 id="modalTitle" class="text-2xl font-bold"></h3>
+                <p id="modalCategory" class="text-emerald-400 mt-2"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const categories = [
+            { name: 'normal event', type: 'safety', color: 'bg-gray-500' },
+            { name: 'theft', type: 'crime', color: 'bg-red-600' },
+            { name: 'fighting and physical conflict', type: 'crime', color: 'bg-red-700' },
+            { name: 'weapons incident', type: 'crime', color: 'bg-red-800' },
+            { name: 'robbery', type: 'crime', color: 'bg-red-600' },
+            { name: 'animal abuse', type: 'animal', color: 'bg-orange-600' },
+            { name: 'slip and fall accident', type: 'safety', color: 'bg-yellow-600' },
+            { name: 'sudden illness and seizure', type: 'safety', color: 'bg-pink-600' },
+            { name: 'fire', type: 'disaster', color: 'bg-orange-700' },
+            { name: 'vandalism', type: 'crime', color: 'bg-red-500' },
+            { name: 'explosion', type: 'disaster', color: 'bg-orange-800' },
+            { name: 'falling object and collapse', type: 'infrastructure', color: 'bg-gray-700' },
+            { name: 'animal attack or fight', type: 'animal', color: 'bg-orange-600' },
+            { name: 'wild large animal intrusion', type: 'animal', color: 'bg-orange-500' },
+            { name: 'pushing conflict', type: 'crime', color: 'bg-red-600' },
+            { name: 'extreme weather events', type: 'disaster', color: 'bg-blue-700' },
+            { name: 'person drowning', type: 'safety', color: 'bg-blue-800' },
+            { name: 'animal predation', type: 'animal', color: 'bg-orange-700' },
+            { name: 'animal fight', type: 'animal', color: 'bg-orange-600' },
+            { name: 'animal fall and injury', type: 'animal', color: 'bg-orange-500' },
+            { name: 'natural disasters', type: 'disaster', color: 'bg-purple-700' },
+            { name: 'ground collapse', type: 'infrastructure', color: 'bg-gray-800' },
+            { name: 'landslide', type: 'disaster', color: 'bg-yellow-800' },
+            { name: 'medical emergency', type: 'safety', color: 'bg-pink-700' },
+            { name: 'safety violations', type: 'safety', color: 'bg-yellow-700' },
+            { name: 'equipment breakdown', type: 'infrastructure', color: 'bg-gray-600' },
+            { name: 'construction accident', type: 'infrastructure', color: 'bg-yellow-700' },
+            { name: 'traffic accident', type: 'safety', color: 'bg-red-500' },
+            { name: 'structural failure', type: 'infrastructure', color: 'bg-gray-700' },
+            { name: 'leakage', type: 'infrastructure', color: 'bg-blue-600' },
+            { name: 'infrastructure failure', type: 'infrastructure', color: 'bg-gray-700' },
+            { name: 'avalanche', type: 'disaster', color: 'bg-blue-300' }
+        ];
+
+        function createVideoCards() {
+            const grid = document.getElementById('videoGrid');
+            grid.innerHTML = categories.map((cat, index) => `
+                <div class="video-card" onclick="openModal('${cat.name}', ${index})">
+                    <div class="relative group cursor-pointer overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                        <div class="aspect-video bg-gradient-to-br from-emerald-100 to-emerald-200 flex items-center justify-center">
+                            <svg class="w-20 h-20 text-emerald-600 group-hover:text-emerald-700 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </div>
+                        <div class="absolute top-3 right-3">
+                            <span class="${cat.color} text-white text-sm px-3 py-1.5 rounded-full font-semibold shadow-lg">
+                                ${index + 1}
+                            </span>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                            <p class="text-white text-sm font-bold line-clamp-2">${cat.name}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openModal(categoryName, index) {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('modalVideo');
+            const title = document.getElementById('modalTitle');
+            const categoryLabel = document.getElementById('modalCategory');
+            
+            // Replace with your actual video URL
+            video.src = `path/to/your/videos/${categoryName.replace(/\s+/g, '_')}.mp4`;
+            title.textContent = `Video ${index + 1}`;
+            categoryLabel.textContent = categoryName;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('modalVideo');
+            
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            video.pause();
+            video.src = '';
+        }
+
+        // Initialize
+        createVideoCards();
+    </script>
+
+    <style>
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+
+    <footer class="text-center py-6 text-sm text-emerald-700 border-t border-emerald-200 mt-12 bg-emerald-50">
+        &copy; 2025 Pistachio Benchmark. All rights reserved.
+    </footer>
+</body>
+</html>
